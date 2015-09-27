@@ -24,11 +24,10 @@ fastfir->Update(data);
 Clone/Download repository.
 
 Demo project requires at least Qt5.
-Open FastFIR/FastFIR/Demo/Demo.pro with Qt creator and run.
-Demo compares slow FIR and fast FIR times and low pass filters noise at 800Hz and outputs this to the default soundcard device.
+Open [FastFIR/Demo/Demo.pro](FastFIR/Demo/Demo.pro) with Qt creator and run.
+Demo compares slow FIR and fast FIR times and low pass filter's noise at 800Hz and outputs this to the default soundcard device.
 
 ![Demo program output](FastFIR/Demo/screenshot.png)
-Demo program output
 
 Jonti 2015
 http://jontio.zapto.org
