@@ -16,7 +16,6 @@ fastfir->setKernel(JFilterDesign::LowPassHanning(800,48000,1001));
 
 //process data (data is QVector<kffsamp_t>, eg "QVector<kffsamp_t> data;")
 fastfir->Update(data);
-
 ```
 
 ##Getting started
