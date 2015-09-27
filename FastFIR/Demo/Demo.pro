@@ -27,6 +27,7 @@ DISTFILES += \
     ../../kiss_fft130_jfork1.0.0/CHANGELOG \
     ../../kiss_fft130_jfork1.0.0/COPYING \
     ../LICENSE \
-    ../../README.md
+    ../../README.md \
+    screenshot.png
 
 
