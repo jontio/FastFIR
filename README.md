@@ -28,6 +28,45 @@ Demo compares slow FIR and fast FIR times and low pass filter's noise at 800Hz a
 
 ![Demo program output](FastFIR/Demo/screenshot.png)
 
+##Filters designs included
+
+The class JFilterDesign contains the following filter designs as static member functions
+
+* LPF *Low Pass Filter*
+* HPF *High Pass Filter*
+* BPF *Band Pass Filter*
+* BSF *Band Stop Filter*
+
+The static members are as follows where frequencies are in Hz and Samplerate is in samples per second.
+
+```C++
+QVector<kffsamp_t> JFilterDesign::LowPassHanning(double FrequencyCutOff, double SampleRate, int Length);
+QVector<kffsamp_t> HighPassHanning(double FrequencyCutOff, double SampleRate, int Length);
+QVector<kffsamp_t> BandPassHanning(double LowFrequencyCutOff,double HighFrequencyCutOff, double SampleRate, int Length);
+QVector<kffsamp_t> BandStopHanning(double LowFrequencyCutOff,double HighFrequencyCutOff, double SampleRate, int Length);
+```
+
+These designs return the kernel for use with the FastFir. For example, to create a BPF that has a FIR length of 1001 that covers 1000Hz to 2000Hz and a Samplerate of 48000bps then following code can be used.
+
+```C++
+...
+//set the kernel of the filter, in this case a BPF from 1kHz to 2kHz
+fastfir->setKernel(JFilterDesign::BandPassHanning(1000,2000,48000,1001));
+...
+```
+
+##QJFastFIRFilter member Update
+
+The QJFastFIRFilter class contains the public member function "Update" that does the processing of the raw input signal/data. Its prototype is as follows.
+
+```C++
+int Update(QVector<kffsamp_t> &data);
+```
+
+It is designed so that it reads "data", filteres it, then replaces "data" with the filtered responce. It performs internal buffering so that no matter how much data is given to "Update", "Update" will replace every item in "data". Basicly this makes it eaiser to design applications.
+
+Update's return value is the number of items in data that it has replaced. This should always be equal to the size of "data" and only serves as a check.
+
 Jonti 2015
 http://jontio.zapto.org
 
