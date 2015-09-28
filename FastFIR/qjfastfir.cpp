@@ -20,10 +20,10 @@ double sinc_normalized(double val)
 }
 
 QVector<kffsamp_t> JFilterDesign::LowPassHanning(double FrequencyCutOff, double SampleRate, int Length)
-{
+{    
     QVector<kffsamp_t> h;
     if(Length<1)return h;
-    if(Length%2)Length++;
+    if(!(Length%2))Length++;
     int j=1;
     for(int i=(-(Length-1)/2);i<=((Length-1)/2);i++)
     {
@@ -40,6 +40,66 @@ hideal = (2*FrequencyCutOff/SampleRate)*sinc(2*FrequencyCutOff*idx/SampleRate);
 h = hanning(Length)' .* hideal;
 */
 
+}
+
+QVector<kffsamp_t> JFilterDesign::HighPassHanning(double FrequencyCutOff, double SampleRate, int Length)
+{
+    QVector<kffsamp_t> h;
+    if(Length<1)return h;
+    if(!(Length%2))Length++;
+
+    QVector<kffsamp_t> h1;
+    QVector<kffsamp_t> h2;
+    h2.fill(0,Length);
+    h2[(Length-1)/2]=1.0;
+
+    h1=LowPassHanning(FrequencyCutOff,SampleRate,Length);
+    if((h1.size()==Length)&&(h2.size()==Length))
+    {
+        for(int i=0;i<Length;i++)h.push_back(h2[i]-h1[i]);
+    }
+
+    return h;
+}
+
+QVector<kffsamp_t> JFilterDesign::BandPassHanning(double LowFrequencyCutOff,double HighFrequencyCutOff, double SampleRate, int Length)
+{
+    QVector<kffsamp_t> h;
+    if(Length<1)return h;
+    if(!(Length%2))Length++;
+
+    QVector<kffsamp_t> h1;
+    QVector<kffsamp_t> h2;
+
+    h2=LowPassHanning(HighFrequencyCutOff,SampleRate,Length);
+    h1=LowPassHanning(LowFrequencyCutOff,SampleRate,Length);
+
+    if((h1.size()==Length)&&(h2.size()==Length))
+    {
+        for(int i=0;i<Length;i++)h.push_back(h2[i]-h1[i]);
+    }
+
+    return h;
+}
+
+QVector<kffsamp_t> JFilterDesign::BandStopHanning(double LowFrequencyCutOff,double HighFrequencyCutOff, double SampleRate, int Length)
+{
+    QVector<kffsamp_t> h;
+    if(Length<1)return h;
+    if(!(Length%2))Length++;
+
+    QVector<kffsamp_t> h1;
+    QVector<kffsamp_t> h2;
+    h2.fill(0,Length);
+    h2[(Length-1)/2]=1.0;
+
+    h1=BandPassHanning(LowFrequencyCutOff,HighFrequencyCutOff,SampleRate,Length);
+    if((h1.size()==Length)&&(h2.size()==Length))
+    {
+        for(int i=0;i<Length;i++)h.push_back(h2[i]-h1[i]);
+    }
+
+    return h;
 }
 
 //---slow FIR
@@ -121,6 +181,7 @@ int QJFastFIRFilter::setKernel(QVector<kffsamp_t> imp_responce)
 
 int QJFastFIRFilter::setKernel(QVector<kffsamp_t> imp_responce,int _nfft)
 {
+    if(!imp_responce.size())return nfft;
     free(cfg);
     _nfft=pow(2.0,(ceil(log2(_nfft))));
     nfft=_nfft;

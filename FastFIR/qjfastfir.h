@@ -57,7 +57,7 @@ private:
 };
 
 //low pass design
-
+//all designs are using the window method and derived from the low pass filter
 
 
 class JFilterDesign
@@ -65,6 +65,9 @@ class JFilterDesign
 public:
     JFilterDesign(){}
     static QVector<kffsamp_t> LowPassHanning(double FrequencyCutOff, double SampleRate, int Length);
+    static QVector<kffsamp_t> HighPassHanning(double FrequencyCutOff, double SampleRate, int Length);
+    static QVector<kffsamp_t> BandPassHanning(double LowFrequencyCutOff,double HighFrequencyCutOff, double SampleRate, int Length);
+    static QVector<kffsamp_t> BandStopHanning(double LowFrequencyCutOff,double HighFrequencyCutOff, double SampleRate, int Length);
 private:
 };
 
