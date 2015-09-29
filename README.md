@@ -14,7 +14,7 @@ QJFastFIRFilter *fastfir;
 fastfir = new QJFastFIRFilter(this);
 
 //set the kernel of the filter, in this case a Low Pass filter at 800Hz
-fastfir->setKernel(JFilterDesign::LowPassHanning(800,48000,1001));
+fastfir->setKernel(QJFilterDesign::LowPassHanning(800,48000,1001));
 
 //process data (data is QVector<kffsamp_t>, eg "QVector<kffsamp_t> data;")
 fastfir->Update(data);
@@ -53,7 +53,7 @@ Demo compares slow FIR and fast FIR times and low pass filter's noise at 800Hz a
 
 ##Filters designs included
 
-The class JFilterDesign contains the following filter designs as static member functions
+The class QJFilterDesign/JFilterDesign contains the following filter designs as static member functions
 
 * LPF *Low Pass Filter*
 * HPF *High Pass Filter*
@@ -63,7 +63,7 @@ The class JFilterDesign contains the following filter designs as static member f
 The static members for the Qt version are as follows where frequencies are in Hz and Samplerate is in samples per second.
 
 ```C++
-QVector<kffsamp_t> JFilterDesign::LowPassHanning(double FrequencyCutOff, double SampleRate, int Length);
+QVector<kffsamp_t> LowPassHanning(double FrequencyCutOff, double SampleRate, int Length);
 QVector<kffsamp_t> HighPassHanning(double FrequencyCutOff, double SampleRate, int Length);
 QVector<kffsamp_t> BandPassHanning(double LowFrequencyCutOff,double HighFrequencyCutOff, double SampleRate, int Length);
 QVector<kffsamp_t> BandStopHanning(double LowFrequencyCutOff,double HighFrequencyCutOff, double SampleRate, int Length);
@@ -74,7 +74,7 @@ These designs return the kernel for use with the FastFir. For example, to create
 ```C++
 ...
 //set the kernel of the filter, in this case a BPF from 1kHz to 2kHz
-fastfir->setKernel(JFilterDesign::BandPassHanning(1000,2000,48000,1001));
+fastfir->setKernel(QJFilterDesign::BandPassHanning(1000,2000,48000,1001));
 ...
 ```
 
