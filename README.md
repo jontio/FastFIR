@@ -4,6 +4,8 @@ It's really fast compared to slow filtering!!!
 
 ##API usage with Qt
 
+Include `qjfastfir.h` and compile and link with `qjfastfir.cpp`
+
 ```C++
 //create pointer
 QJFastFIRFilter *fastfir;
@@ -16,6 +18,27 @@ fastfir->setKernel(JFilterDesign::LowPassHanning(800,48000,1001));
 
 //process data (data is QVector<kffsamp_t>, eg "QVector<kffsamp_t> data;")
 fastfir->Update(data);
+```
+
+##API usage with standard C++
+
+Include `jfastfir.h` and compile and link with `jfastfir.cpp`
+
+```C++
+//create pointer
+JFastFIRFilter *fastfir;
+
+//create fast FIR filter
+fastfir = new JFastFIRFilter;
+
+//set the kernel of the filter, in this case a Low Pass filter at 800Hz
+fastfir->setKernel(JFilterDesign::LowPassHanning(800,48000,1001));
+
+//process data (data is vector<kffsamp_t>, eg "vector<kffsamp_t> data;")
+fastfir->Update(data);
+
+//delete FastFIR object
+delete fastfir;
 ```
 
 ##Getting started
