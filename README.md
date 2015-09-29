@@ -60,7 +60,7 @@ The class JFilterDesign contains the following filter designs as static member f
 * BPF *Band Pass Filter*
 * BSF *Band Stop Filter*
 
-The static members are as follows where frequencies are in Hz and Samplerate is in samples per second.
+The static members for the Qt version are as follows where frequencies are in Hz and Samplerate is in samples per second.
 
 ```C++
 QVector<kffsamp_t> JFilterDesign::LowPassHanning(double FrequencyCutOff, double SampleRate, int Length);
