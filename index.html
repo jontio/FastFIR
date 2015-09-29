@@ -36,17 +36,17 @@ QJFastFIRFilter *fastfir;
 fastfir = <span class="pl-k">new</span> QJFastFIRFilter(<span class="pl-v">this</span>);
 
 <span class="pl-c">//set the kernel of the filter, in this case a Low Pass filter at 800Hz</span>
-fastfir-&gt;<span class="pl-en">setKernel</span>(JFilterDesign::LowPassHanning(<span class="pl-c1">800</span>,<span class="pl-c1">48000</span>,<span class="pl-c1">1001</span>));
+fastfir-&gt;<span class="pl-en">setKernel</span>(QJFilterDesign::LowPassHanning(<span class="pl-c1">800</span>,<span class="pl-c1">48000</span>,<span class="pl-c1">1001</span>));
 
 <span class="pl-c">//process data (data is QVector&lt;kffsamp_t&gt;, eg "QVector&lt;kffsamp_t&gt; data;")</span>
 fastfir-&gt;<span class="pl-en">Update</span>(data);</pre></div>
 
-<p>If you already have Qt Creator with Qt5 or above getting started is as simple as downloading the library and running the demo application with Qt Creator; no other downloads needed.</p>
+<p>If you already have Qt Creator with Qt5 or above getting started is as simple as downloading the library and running the demo application with Qt Creator; no other downloads needed. Alternatively classes for use with standard C++ without Qt are also included.</p>
 
 <h2>
 <a id="filter-designs-included" class="anchor" href="#filter-designs-included" aria-hidden="true"><span class="octicon octicon-link"></span></a>Filter designs included</h2>
 
-<p>The JFilterDesign class contains the following filter designs for use with Fast FIR filtering</p>
+<p>The QJFilterDesign/JFilterDesign class contains the following filter designs for use with Fast FIR filtering</p>
 
 <ul>
 <li>LPF <em>Low Pass Filter</em>
