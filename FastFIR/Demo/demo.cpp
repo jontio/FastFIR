@@ -13,11 +13,11 @@ Demo::Demo(QWidget *parent) :
 
     //create fast fir LPF
     fastfir = new QJFastFIRFilter(this);
-    fastfir->setKernel(JFilterDesign::LowPassHanning(800,48000,1001));
+    fastfir->setKernel(QJFilterDesign::LowPassHanning(800,48000,1001));
 
     //create slow fir LPF
     slowfir = new QJSlowFIRFilter(this);
-    slowfir->setKernel(JFilterDesign::LowPassHanning(800,48000,1001));
+    slowfir->setKernel(QJFilterDesign::LowPassHanning(800,48000,1001));
 
     //make some data
     QVector<kffsamp_t> buf;
@@ -62,7 +62,7 @@ Generator::Generator(QAudioFormat format, QObject *parent) : QIODevice(parent)
 
     //create fast FIR LPF
     fastfir = new QJFastFIRFilter(this);
-    fastfir->setKernel(JFilterDesign::LowPassHanning(800,format.sampleRate(),2111));
+    fastfir->setKernel(QJFilterDesign::LowPassHanning(800,format.sampleRate(),2111));
 
 }
 

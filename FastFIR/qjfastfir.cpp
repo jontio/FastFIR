@@ -19,7 +19,7 @@ double sinc_normalized(double val)
     return (sin(M_PI*val)/(M_PI*val));
 }
 
-QVector<kffsamp_t> JFilterDesign::LowPassHanning(double FrequencyCutOff, double SampleRate, int Length)
+QVector<kffsamp_t> QJFilterDesign::LowPassHanning(double FrequencyCutOff, double SampleRate, int Length)
 {    
     QVector<kffsamp_t> h;
     if(Length<1)return h;
@@ -42,7 +42,7 @@ h = hanning(Length)' .* hideal;
 
 }
 
-QVector<kffsamp_t> JFilterDesign::HighPassHanning(double FrequencyCutOff, double SampleRate, int Length)
+QVector<kffsamp_t> QJFilterDesign::HighPassHanning(double FrequencyCutOff, double SampleRate, int Length)
 {
     QVector<kffsamp_t> h;
     if(Length<1)return h;
@@ -62,7 +62,7 @@ QVector<kffsamp_t> JFilterDesign::HighPassHanning(double FrequencyCutOff, double
     return h;
 }
 
-QVector<kffsamp_t> JFilterDesign::BandPassHanning(double LowFrequencyCutOff,double HighFrequencyCutOff, double SampleRate, int Length)
+QVector<kffsamp_t> QJFilterDesign::BandPassHanning(double LowFrequencyCutOff,double HighFrequencyCutOff, double SampleRate, int Length)
 {
     QVector<kffsamp_t> h;
     if(Length<1)return h;
@@ -82,7 +82,7 @@ QVector<kffsamp_t> JFilterDesign::BandPassHanning(double LowFrequencyCutOff,doub
     return h;
 }
 
-QVector<kffsamp_t> JFilterDesign::BandStopHanning(double LowFrequencyCutOff,double HighFrequencyCutOff, double SampleRate, int Length)
+QVector<kffsamp_t> QJFilterDesign::BandStopHanning(double LowFrequencyCutOff,double HighFrequencyCutOff, double SampleRate, int Length)
 {
     QVector<kffsamp_t> h;
     if(Length<1)return h;
