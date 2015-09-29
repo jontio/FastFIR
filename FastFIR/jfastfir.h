@@ -5,6 +5,9 @@
 #ifndef JFASTFIR_H
 #define JFASTFIR_H
 
+//kiss_fft_scalar sets type of scaller used can be float or double
+//kffsamp_t is the same thing as kiss_fft_scalar as we are doing real FIRs (REAL_FASTFIR==1)
+
 //for double real FIR
 #define kiss_fft_scalar double
 #define REAL_FASTFIR 1
@@ -17,13 +20,13 @@
 
 using namespace std;
 
-
 //slow fir
 
 class JSlowFIRFilter
 {    
 public:
-    JSlowFIRFilter(vector<kffsamp_t> &imp_responce);
+    JSlowFIRFilter();
+    void setKernel(vector<kffsamp_t> imp_responce);
     int Update(kffsamp_t *data,int Size);
     int Update(vector<kffsamp_t> &data);
     void reset();
@@ -38,8 +41,9 @@ private:
 class JFastFIRFilter
 {
 public:
-    JFastFIRFilter(vector<kffsamp_t> &imp_responce,size_t &nfft);
-    JFastFIRFilter(vector<kffsamp_t> &imp_responce);
+    JFastFIRFilter();
+    int setKernel(vector<kffsamp_t> imp_responce,int nfft);
+    int setKernel(vector<kffsamp_t> imp_responce);
     int Update(kffsamp_t *data,int Size);
     int Update(vector<kffsamp_t> &data);
     void reset();
@@ -54,5 +58,18 @@ private:
     int remainder_ptr;
 };
 
+//filter design
+//all designs are using the window method and derived from the low pass filter
+
+class JFilterDesign
+{
+public:
+    JFilterDesign(){}
+    static vector<kffsamp_t> LowPassHanning(double FrequencyCutOff, double SampleRate, int Length);
+    static vector<kffsamp_t> HighPassHanning(double FrequencyCutOff, double SampleRate, int Length);
+    static vector<kffsamp_t> BandPassHanning(double LowFrequencyCutOff,double HighFrequencyCutOff, double SampleRate, int Length);
+    static vector<kffsamp_t> BandStopHanning(double LowFrequencyCutOff,double HighFrequencyCutOff, double SampleRate, int Length);
+private:
+};
 
 #endif  //JFASTFIR

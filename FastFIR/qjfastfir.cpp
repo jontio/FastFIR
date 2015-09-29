@@ -11,7 +11,7 @@
 
 //---------------------------------------------------------------------------
 
-//---low pass filter design
+//---filter design
 
 double sinc_normalized(double val)
 {

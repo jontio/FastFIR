@@ -3,12 +3,114 @@
 
 #include "jfastfir.h"
 
+//c files we need to compile
+#include "../kiss_fft130_jfork1.0.0/kiss_fft.c"
+#include "../kiss_fft130_jfork1.0.0/tools/kiss_fastfir.c"
+#include "../kiss_fft130_jfork1.0.0/tools/kiss_fftr.c"
+
 //---------------------------------------------------------------------------
+
+//---filter design
+
+double sinc_normalized(double val)
+{
+    if (val==0)return 1.0;
+    return (sin(M_PI*val)/(M_PI*val));
+}
+
+vector<kffsamp_t> JFilterDesign::LowPassHanning(double FrequencyCutOff, double SampleRate, int Length)
+{
+    vector<kffsamp_t> h;
+    if(Length<1)return h;
+    if(!(Length%2))Length++;
+    int j=1;
+    for(int i=(-(Length-1)/2);i<=((Length-1)/2);i++)
+    {
+        double w=0.5*(1.0-cos(2.0*M_PI*((double)j)/((double)(Length))));
+        h.push_back(w*(2.0*FrequencyCutOff/SampleRate)*sinc_normalized(2.0*FrequencyCutOff*((double)i)/SampleRate));
+        j++;
+    }
+
+    return h;
+
+/* in matlab this function is
+idx = (-(Length-1)/2:(Length-1)/2);
+hideal = (2*FrequencyCutOff/SampleRate)*sinc(2*FrequencyCutOff*idx/SampleRate);
+h = hanning(Length)' .* hideal;
+*/
+
+}
+
+vector<kffsamp_t> JFilterDesign::HighPassHanning(double FrequencyCutOff, double SampleRate, int Length)
+{
+    vector<kffsamp_t> h;
+    if(Length<1)return h;
+    if(!(Length%2))Length++;
+
+    vector<kffsamp_t> h1;
+    vector<kffsamp_t> h2;
+    h2.assign(Length,0);
+    h2[(Length-1)/2]=1.0;
+
+    h1=LowPassHanning(FrequencyCutOff,SampleRate,Length);
+    if((h1.size()==(size_t)Length)&&(h2.size()==(size_t)Length))
+    {
+        for(int i=0;i<Length;i++)h.push_back(h2[i]-h1[i]);
+    }
+
+    return h;
+}
+
+vector<kffsamp_t> JFilterDesign::BandPassHanning(double LowFrequencyCutOff,double HighFrequencyCutOff, double SampleRate, int Length)
+{
+    vector<kffsamp_t> h;
+    if(Length<1)return h;
+    if(!(Length%2))Length++;
+
+    vector<kffsamp_t> h1;
+    vector<kffsamp_t> h2;
+
+    h2=LowPassHanning(HighFrequencyCutOff,SampleRate,Length);
+    h1=LowPassHanning(LowFrequencyCutOff,SampleRate,Length);
+
+    if((h1.size()==(size_t)Length)&&(h2.size()==(size_t)Length))
+    {
+        for(int i=0;i<Length;i++)h.push_back(h2[i]-h1[i]);
+    }
+
+    return h;
+}
+
+vector<kffsamp_t> JFilterDesign::BandStopHanning(double LowFrequencyCutOff,double HighFrequencyCutOff, double SampleRate, int Length)
+{
+    vector<kffsamp_t> h;
+    if(Length<1)return h;
+    if(!(Length%2))Length++;
+
+    vector<kffsamp_t> h1;
+    vector<kffsamp_t> h2;
+    h2.assign(Length,0);
+    h2[(Length-1)/2]=1.0;
+
+    h1=BandPassHanning(LowFrequencyCutOff,HighFrequencyCutOff,SampleRate,Length);
+    if((h1.size()==(size_t)Length)&&(h2.size()==(size_t)Length))
+    {
+        for(int i=0;i<Length;i++)h.push_back(h2[i]-h1[i]);
+    }
+
+    return h;
+}
 
 
 //---slow FIR
 
-JSlowFIRFilter::JSlowFIRFilter(vector<kffsamp_t> &imp_responce)
+JSlowFIRFilter::JSlowFIRFilter()
+{
+    Cof.push_back(1.0);
+    reset();
+}
+
+void JSlowFIRFilter::setKernel(vector<kffsamp_t> imp_responce)
 {
     Cof=imp_responce;
     reset();
@@ -55,27 +157,36 @@ int JSlowFIRFilter::Update(kffsamp_t *data, int Size)
 }
 
 
-
 //---------------
 
 
 //---fast FIR
 
-
-JFastFIRFilter::JFastFIRFilter(vector<kffsamp_t> &imp_responce,size_t &_nfft)
+JFastFIRFilter::JFastFIRFilter()
 {
-    _nfft=pow(2.0,(ceil(log2(_nfft))));
-    cfg=kiss_fastfir_alloc(imp_responce.data(),imp_responce.size(),&_nfft,0,0);
-    nfft=_nfft;
+    vector<kffsamp_t> tvect;
+    tvect.push_back(1.0);
+    nfft=2;
+    cfg=kiss_fastfir_alloc(tvect.data(),tvect.size(),&nfft,0,0);
     reset();
 }
 
-JFastFIRFilter::JFastFIRFilter(vector<kffsamp_t> &imp_responce)
+int JFastFIRFilter::setKernel(vector<kffsamp_t> imp_responce)
 {
-    nfft=4*imp_responce.size();
-    nfft=pow(2.0,(ceil(log2(nfft))));
+    int _nfft=imp_responce.size()*4;//rule of thumb
+    _nfft=pow(2.0,(ceil(log2(_nfft))));
+    return setKernel(imp_responce,_nfft);
+}
+
+int JFastFIRFilter::setKernel(vector<kffsamp_t> imp_responce, int _nfft)
+{
+    if(!imp_responce.size())return nfft;
+    free(cfg);
+    _nfft=pow(2.0,(ceil(log2(_nfft))));
+    nfft=_nfft;
     cfg=kiss_fastfir_alloc(imp_responce.data(),imp_responce.size(),&nfft,0,0);
     reset();
+    return nfft;
 }
 
 void JFastFIRFilter::reset()

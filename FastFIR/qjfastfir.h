@@ -56,9 +56,8 @@ private:
     int remainder_ptr;
 };
 
-//low pass design
+//filter design
 //all designs are using the window method and derived from the low pass filter
-
 
 class JFilterDesign
 {
