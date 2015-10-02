@@ -83,12 +83,10 @@ fastfir->setKernel(QJFilterDesign::BandPassHanning(1000,2000,48000,1001));
 The QJFastFIRFilter class contains the public member function "Update" that does the processing of the raw input signal/data. Its prototype is as follows.
 
 ```C++
-int Update(QVector<kffsamp_t> &data);
+void Update(QVector<kffsamp_t> &data);
 ```
 
 It is designed so that it reads "data", filteres it, then replaces "data" with the filtered responce. It performs internal buffering so that no matter how much data is given to "Update", "Update" will replace every item in "data". Basicly this makes it eaiser to design applications.
-
-Update's return value is the number of items in data that it has replaced. This should always be equal to the size of "data" and only serves as a check.
 
 Jonti 2015
 http://jontio.zapto.org

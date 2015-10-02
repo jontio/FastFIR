@@ -122,12 +122,12 @@ void JSlowFIRFilter::reset()
     BufPtr=0;
 }
 
-int JSlowFIRFilter::Update(vector<kffsamp_t> &data)
+void JSlowFIRFilter::Update(vector<kffsamp_t> &data)
 {
-    return Update(data.data(), data.size());
+    Update(data.data(), data.size());
 }
 
-int JSlowFIRFilter::Update(kffsamp_t *data, int Size)
+void JSlowFIRFilter::Update(kffsamp_t *data, int Size)
 {
 
     if(Buf.size()!=Cof.size())
@@ -151,8 +151,6 @@ int JSlowFIRFilter::Update(kffsamp_t *data, int Size)
             BufPtr++;if(BufPtr==Bufsz)BufPtr=0;
         }
     }
-
-    return Size;
 
 }
 
@@ -196,12 +194,12 @@ void JFastFIRFilter::reset()
     remainder_ptr=nfft;
 }
 
-int JFastFIRFilter::Update(vector<kffsamp_t> &data)
+void JFastFIRFilter::Update(vector<kffsamp_t> &data)
 {
-    return Update(data.data(), data.size());
+    Update(data.data(), data.size());
 }
 
-int JFastFIRFilter::Update(kffsamp_t *data,int Size)
+void JFastFIRFilter::Update(kffsamp_t *data,int Size)
 {
 
     //ensure enough storage
@@ -252,15 +250,12 @@ int JFastFIRFilter::Update(kffsamp_t *data,int Size)
         remainder_ptr+=(nwrite-numfromoutbuf);
     }
 
-
+    //if currentwantednum>0 then some items were not changed, this should not happen
     //we should anyways have enough to return but if we dont this happens. this should be avoided else a discontinuity of frames occurs. set remainder to zero and set remainder_ptr to nfft before running to avoid this
     if(currentwantednum>0)
     {
         remainder_ptr+=currentwantednum;
     }
-
-    //return how many items we changed
-    return Size-currentwantednum;
 
 }
 

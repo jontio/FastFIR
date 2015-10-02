@@ -122,12 +122,12 @@ void QJSlowFIRFilter::reset()
     BufPtr=0;
 }
 
-int QJSlowFIRFilter::Update(QVector<kffsamp_t> &data)
+void QJSlowFIRFilter::Update(QVector<kffsamp_t> &data)
 {
-    return Update(data.data(), data.size());
+    Update(data.data(), data.size());
 }
 
-int QJSlowFIRFilter::Update(kffsamp_t *data, int Size)
+void QJSlowFIRFilter::Update(kffsamp_t *data, int Size)
 {
 
     if(Buf.size()!=Cof.size())
@@ -151,8 +151,6 @@ int QJSlowFIRFilter::Update(kffsamp_t *data, int Size)
             BufPtr++;if(BufPtr==Bufsz)BufPtr=0;
         }
     }
-
-    return Size;
 
 }
 
@@ -198,12 +196,12 @@ void QJFastFIRFilter::reset()
     remainder_ptr=nfft;
 }
 
-int QJFastFIRFilter::Update(QVector<kffsamp_t> &data)
+void QJFastFIRFilter::Update(QVector<kffsamp_t> &data)
 {
-    return Update(data.data(), data.size());
+    Update(data.data(), data.size());
 }
 
-int QJFastFIRFilter::Update(kffsamp_t *data,int Size)
+void QJFastFIRFilter::Update(kffsamp_t *data,int Size)
 {
 
     //ensure enough storage
@@ -255,15 +253,13 @@ int QJFastFIRFilter::Update(kffsamp_t *data,int Size)
     }
 
 
+    //if currentwantednum>0 then some items were not changed, this should not happen
     //we should anyways have enough to return but if we dont this happens. this should be avoided else a discontinuity of frames occurs. set remainder to zero and set remainder_ptr to nfft before running to avoid this
     if(currentwantednum>0)
     {
         qDebug()<<"Error: user wants "<<currentwantednum<<" more items from fir filter!";
         remainder_ptr+=currentwantednum;
     }
-
-    //return how many items we changed
-    return Size-currentwantednum;
 
 }
 

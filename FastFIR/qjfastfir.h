@@ -24,8 +24,8 @@ class QJSlowFIRFilter : public QObject
 public:
     QJSlowFIRFilter(QObject *parent = 0);
     void setKernel(QVector<kffsamp_t> imp_responce);
-    int Update(kffsamp_t *data,int Size);
-    int Update(QVector<kffsamp_t> &data);
+    void Update(kffsamp_t *data,int Size);
+    void Update(QVector<kffsamp_t> &data);
     void reset();
 private:
     QVector<kffsamp_t> Cof;
@@ -42,8 +42,8 @@ public:
     QJFastFIRFilter(QObject *parent = 0);
     int setKernel(QVector<kffsamp_t> imp_responce,int nfft);
     int setKernel(QVector<kffsamp_t> imp_responce);
-    int Update(kffsamp_t *data,int Size);
-    int Update(QVector<kffsamp_t> &data);
+    void Update(kffsamp_t *data,int Size);
+    void Update(QVector<kffsamp_t> &data);
     void reset();
     ~QJFastFIRFilter();
 private:

@@ -27,8 +27,8 @@ class JSlowFIRFilter
 public:
     JSlowFIRFilter();
     void setKernel(vector<kffsamp_t> imp_responce);
-    int Update(kffsamp_t *data,int Size);
-    int Update(vector<kffsamp_t> &data);
+    void Update(kffsamp_t *data,int Size);
+    void Update(vector<kffsamp_t> &data);
     void reset();
 private:
     vector<kffsamp_t> Cof;
@@ -44,8 +44,8 @@ public:
     JFastFIRFilter();
     int setKernel(vector<kffsamp_t> imp_responce,int nfft);
     int setKernel(vector<kffsamp_t> imp_responce);
-    int Update(kffsamp_t *data,int Size);
-    int Update(vector<kffsamp_t> &data);
+    void Update(kffsamp_t *data,int Size);
+    void Update(vector<kffsamp_t> &data);
     void reset();
     ~JFastFIRFilter();
 private:
