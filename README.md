@@ -2,7 +2,7 @@
 1D real fast FIR filtering.
 It's really fast compared to slow filtering!!!
 
-##API usage with Qt
+## API usage with Qt
 
 Include `qjfastfir.h` and compile and link with `qjfastfir.cpp`
 
@@ -20,7 +20,7 @@ fastfir->setKernel(QJFilterDesign::LowPassHanning(800,48000,1001));
 fastfir->Update(data);
 ```
 
-##API usage with standard C++
+## API usage with standard C++
 
 Include `jfastfir.h` and compile and link with `jfastfir.cpp`
 
@@ -41,7 +41,7 @@ fastfir->Update(data);
 delete fastfir;
 ```
 
-##Getting started
+## Getting started
 
 Clone/Download repository.
 
@@ -51,7 +51,7 @@ Demo compares slow FIR and fast FIR times and low pass filter's noise at 800Hz a
 
 ![Demo program output](FastFIR/Demo/screenshot.png)
 
-##Filters designs included
+## Filters designs included
 
 The class QJFilterDesign/JFilterDesign contains the following filter designs as static member functions
 
@@ -78,7 +78,7 @@ fastfir->setKernel(QJFilterDesign::BandPassHanning(1000,2000,48000,1001));
 ...
 ```
 
-##QJFastFIRFilter member Update
+## QJFastFIRFilter member Update
 
 The QJFastFIRFilter class contains the public member function "Update" that does the processing of the raw input signal/data. Its prototype is as follows.
 
