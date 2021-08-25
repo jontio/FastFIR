@@ -3,6 +3,8 @@
 
 #include "qjfastfir.h"
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
 
 //c files we need to compile
 #include "../kiss_fft130_jfork1.0.0/kiss_fft.c"

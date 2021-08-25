@@ -3,6 +3,9 @@
 
 #include "jfastfir.h"
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+
 //c files we need to compile
 #include "../kiss_fft130_jfork1.0.0/kiss_fft.c"
 #include "../kiss_fft130_jfork1.0.0/tools/kiss_fastfir.c"
